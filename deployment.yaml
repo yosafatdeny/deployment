@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-kubernetes
+spec:
+  selector:
+    matchLabels:
+      run: deployment-kubernetes
+  template:
+    metadata:
+      name: pod-nodejs
+      labels:
+        run: deployment-kubernetes
+    spec:
+      containers:
+        - name: deployment-kubernetes
+          image: yosafatdeny/nodejs:0.1
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 200m   
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-nodejs
+  labels:
+    run: deployment-kubernetes
+spec:
+  type: LoadBalancer
+  selector:
+    run: deployment-kubernetes
+  ports:
+    - port: 80
+      targetPort: 8080
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-nodejs
+spec:
+  minReplicas: 2
+  maxReplicas: 5
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: deployment-kubernetes
+  metrics:
+    - type: Resource 
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 45
+     
