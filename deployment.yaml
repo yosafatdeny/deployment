@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: deployment-kubernetes
+  namespace: test
 spec:
   selector:
     matchLabels:
@@ -31,6 +32,7 @@ metadata:
   name: svc-nodejs
   labels:
     run: deployment-kubernetes
+  namespace: test  
 spec:
   type: LoadBalancer
   selector:
@@ -45,6 +47,7 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: hpa-nodejs
+  namespace: test
 spec:
   minReplicas: 2
   maxReplicas: 5
