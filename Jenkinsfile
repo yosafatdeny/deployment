@@ -8,28 +8,7 @@ pipeline {
 
   stages {
     
-    stage ('Install Dependencies rigup project'){
-      steps{
-        echo "Starts install dependencies rigup project"
-        sh "npm install"
-      }
-    }
-
-    //stage dua
-    stage ('Test project'){
-      steps{
-        echo "run test script"    
-      }
-    } 
-
-    //stage tiga
-    stage ('Build rigup project'){
-      steps{    
-        sh 'npm run build'
-      }
-    } 
-
-    //stage empat
+    //stage satu
     stage ('Build docker images'){
       steps{    
         script {
@@ -38,7 +17,7 @@ pipeline {
       }
     }
 
-    //stage lima
+    //stage dua
     stage ('push image to registry'){
       steps{    
         script{
@@ -50,7 +29,7 @@ pipeline {
       }    
     }  
 
-    //stage enam
+    //stage tiga
     stage ('deploy app to kubernetes cluster'){
       steps{    
         sh "chmod +x changeTag.sh"
